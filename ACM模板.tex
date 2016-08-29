@@ -1,14 +1,33 @@
 \documentclass[UTF8,a4paper]{ctexart}
-\usepackage{color}
+\usepackage{xcolor}
 \usepackage{fancyhdr}
 \usepackage{amsfonts}
-\usepackage{graphicx}
+%\usepackage{graphicx}
 \usepackage{listings}
 \usepackage{lastpage}
-\usepackage{multirow}
-\usepackage{makecell}
+%\usepackage{multirow}
+%\usepackage{makecell}
 \usepackage{setspace}
 \usepackage{indentfirst}
+
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\lstset{
+  language=[ANSI]c,
+  basicstyle=\small,
+  numbers=left,
+  keywordstyle=\color{blue},
+  numberstyle={\tiny\color{lightgray}},
+  stepnumber=1, %行号会逐行往上递增
+  numbersep=5pt,
+  showspaces=false,
+  showtabs=false,
+  tabsize=4,
+  breaklines=tr,
+  extendedchars=false %这一条命令可以解决代码跨页时，章节标题，页眉等汉字不显示的问题
+}
+
 \author{PKU cstdio,hzwer,Kuribohg}
 \title{\Huge ACM模板}
 \begin{document} 
@@ -50,7 +69,7 @@
 
 \subsection{manachar}
 
-\subsection{后缀数组}
+\input{./inc/SuffixArray.tex}
 
 \subsection{后缀自动机}
 
@@ -59,6 +78,8 @@
 \section{图论}
 
 \subsection{最短路}
+
+\subsection{最小生成树}
 
 \subsection{网络流}
 
