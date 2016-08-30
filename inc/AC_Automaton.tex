@@ -1,0 +1,40 @@
+\subsection{AC自动机}
+\begin{lstlisting}[language=C] 
+#define Nil NULL
+const int SIZES=1000010,SIZEN=100010;
+class Node{
+public:
+	int flag;//是否敏感词
+	Node* ch[26];
+	Node* fail;
+	Node(){
+		flag=-1;
+		memset(ch,0,sizeof(ch));
+		fail=Nil;
+	}
+};
+Node *root;
+Node* step(Node *x,int k){
+	while(true){
+		if(x->ch[k]!=Nil) return x->ch[k];
+		if(x==root) return root;
+		x=x->fail;
+	}
+}
+queue<Node*> Q;
+void make_automaton(void){
+	root->fail=root;
+	Q.push(root);
+	while(!Q.empty()){
+		Node *x=Q.front();Q.pop();
+		for(int i=0;i<26;i++){
+			if(x->ch[i]!=Nil){
+				if(x==root) x->ch[i]->fail=root;
+				else x->ch[i]->fail=step(x->fail,i);
+				Q.push(x->ch[i]);
+			}
+			else x->ch[i]=step(x,i);
+		}
+	}
+}
+\end{lstlisting} 

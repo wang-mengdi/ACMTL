@@ -1,0 +1,69 @@
+\subsection{网络流}
+\subsubsection{Dinic}
+\begin{lstlisting}[language=C] 
+const int SIZEN=310,INF=0x7fffffff/2;
+class EDGE{
+public:
+	int from,to,cap,flow;
+};
+vector<EDGE> edges;
+vector<int> c[SIZEN];
+bool visit[SIZEN]={0};//在需要找割集的时候就把这个放在外面
+int S,T,N;//0~N
+int depth[SIZEN]={0};
+int cur[SIZEN]={0};
+void addedge(int from,int to,int cap){
+	EDGE temp;
+	temp.from=from,temp.to=to,temp.cap=cap,temp.flow=0;
+	edges.push_back(temp);
+	temp.from=to,temp.to=from,temp.cap=0,temp.flow=0;
+	edges.push_back(temp);
+	int tot=edges.size()-2;
+	c[from].push_back(tot);
+	c[to].push_back(tot+1);
+}
+bool BFS(void){
+	memset(visit,0,sizeof(visit));
+	queue<int> Q;
+	Q.push(S);visit[S]=true;depth[S]=0;
+	while(!Q.empty()){
+		int x=Q.front();Q.pop();
+		for(int i=0;i<c[x].size();i++){
+			EDGE &now=edges[c[x][i]];
+			if(!visit[now.to]&&now.cap>now.flow){
+				visit[now.to]=true;
+				depth[now.to]=depth[x]+1;
+				Q.push(now.to);
+			}
+		}
+	}
+	return visit[T];
+}
+int DFS(int x,int a){
+	if(x==T||!a) return a;
+	int flow=0,cf=0;
+	for(int i=cur[x];i<c[x].size();i++){
+		cur[x]=i;
+		EDGE &now=edges[c[x][i]];
+		if(depth[x]+1==depth[now.to]){
+			cf=DFS(now.to,min(a,now.cap-now.flow));
+			if(cf){
+				flow+=cf;
+				a-=cf;
+				now.flow+=cf,edges[c[x][i]^1].flow-=cf;
+			}
+			if(!a) break;
+		}
+	}
+	if(!flow) depth[x]=-1;
+	return flow;
+}
+int Dinic(void){
+	int flow=0;
+	while(BFS()){
+		memset(cur,0,sizeof(cur));
+		flow+=DFS(S,INF);
+	}
+	return flow;
+}
+\end{lstlisting}
